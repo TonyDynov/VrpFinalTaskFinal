@@ -1,0 +1,43 @@
+<aura:component >
+    
+    <aura:attribute name="hotelsNumber" type="integer" default=""/>
+    <aura:attribute name="roomsNumber" type="integer" default=""/>
+    
+    <!-- pagination -->
+    <div class="slds-col slds-grid slds-gutters_direct-medium">
+        <lightning:button label="Previous" variant="base" disabled="true" class="slds-col slds-button_base"/>
+        <lightning:button label="1" variant="success"/>
+        <lightning:button label="2" variant="base" class="slds-col slds-button_base"/>
+        <lightning:button label="3" variant="base" class="slds-col slds-button_base"/>
+        <lightning:button label="..." variant="base" class=" slds-col slds-button_base"/>
+        <lightning:button label="13" variant="base" class="slds-col slds-button_base"/>
+        <lightning:button label="Next" variant="base" class="slds-col slds-button_base"/>
+    </div>
+    
+    <!-- rooms & hotels total -->
+    <div class="slds-col slds-m-top_medium ">
+        <!-- check if rooms were found-->
+        <aura:if isTrue="{!v.roomsNumber!=0}">
+            <span class="slds-text-heading_small text">found {!v.roomsNumber}&nbsp;</span>
+            <!-- check if 1 or more rooms were found -->
+            <aura:if isTrue="{!v.roomsNumber>1}">
+                <span class="slds-text-heading_small text">rooms&nbsp;</span>
+                <aura:set attribute="else">
+                    <span class="slds-text-heading_small text">room&nbsp;</span> 
+                </aura:set>
+            </aura:if>
+            <span class="slds-text-heading_small text">in {!v.hotelsNumber}&nbsp;</span>
+            <!-- check if 1 or more hotels were found -->
+            <aura:if isTrue="{!v.hotelsNumber>1}">
+                <span class="slds-text-heading_small text">hotels</span>
+                <aura:set attribute="else">
+                    <span class="slds-text-heading_small text">hotel</span> 
+                </aura:set>
+            </aura:if>
+            <aura:set attribute="else">
+                <span class="slds-text-heading_small text">no rooms found</span> 
+            </aura:set>
+        </aura:if>
+    </div>
+
+</aura:component>

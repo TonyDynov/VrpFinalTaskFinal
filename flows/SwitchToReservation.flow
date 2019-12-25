@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <assignments>
+        <name>prereservation_reservation</name>
+        <label>prereservation &gt;&gt;&gt; reservation</label>
+        <locationX>555</locationX>
+        <locationY>402</locationY>
+        <assignmentItems>
+            <assignToReference>find_reservation.RecordTypeId</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>0122w000000Y1TyAAK</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>update_reservation</targetReference>
+        </connector>
+    </assignments>
+    <decisions>
+        <name>check_reservation_type</name>
+        <label>check reservation type</label>
+        <locationX>424</locationX>
+        <locationY>194</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>true</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>find_reservation.RecordTypeId</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>0122w000000XzWOAA0</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>prereservation_reservation</targetReference>
+            </connector>
+            <label>true</label>
+        </rules>
+    </decisions>
+    <description>Switch reservation record type from pre-reservation to reservation</description>
+    <interviewLabel>Switch {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Switch Reservation type to &apos;reservation&apos;</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <name>find_reservation</name>
+        <label>find reservation</label>
+        <locationX>234</locationX>
+        <locationY>97</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>check_reservation_type</targetReference>
+        </connector>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>ReservationId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Reservation__c</object>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>RecordTypeId</queriedFields>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordUpdates>
+        <name>update_reservation</name>
+        <label>update reservation</label>
+        <locationX>443</locationX>
+        <locationY>548</locationY>
+        <inputReference>find_reservation</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>50</locationX>
+        <locationY>50</locationY>
+        <connector>
+            <targetReference>find_reservation</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <variables>
+        <name>ReservationId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

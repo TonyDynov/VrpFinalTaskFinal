@@ -1,0 +1,177 @@
+<aura:component controller="ReservationModalCmpController">
+    
+    <!-- modal window attributes -->
+    <aura:attribute name="checkInDate" type="date"/>
+    <aura:attribute name="checkOutDate" type="date"/>
+    
+    <!-- attributes for modal window -->
+    <aura:attribute name="roomIdModal" type="string" default=""/>
+    <aura:attribute name="hotelModal" type="string" default=""/>
+    <aura:attribute name="addressModal" type="string" default=""/>
+    <aura:attribute name="roomModal" type="string" default=""/>
+    <aura:attribute name="emailModal" type="string" default=""/>
+    <aura:attribute name="nameModal" type="string" default=""/>
+    <aura:attribute name="totalCostModal" type="decimal" default=""/>
+    
+    <!-- reservation button click event handler -->
+    <aura:handler event="c:ReservationButtonClickEvt" action="{!c.handleReservationButtonClickEvt}"/>
+                                         
+                                         
+                                         
+    <!-- Modal Box Reservation Details--> 
+    <section aura:id="modal" role="dialog" tabindex="-1" aria-modal="true" class="slds-modal">
+        <div class="slds-modal__container">
+            <!-- modal box header  -->
+            <header class="slds-modal__header">
+                <span class="slds-text-heading_large title text">Reservation details</span>
+            </header>
+            <!-- modal box body -->
+            <div class="page-item slds-modal__content slds-p-around_medium slds-is-relative">
+                
+                <!-- modal reservation info -->
+                <div aura:id="modalInfo" class="slds-grid page-item">
+                    <div class="slds-col slds-grid slds-grid_vertical slds-grid_align-space slds-grow-none slds-m-right_small">
+                        <div class="slds-col slds-m-top_xx-small">
+                            <span class="slds-text-heading_medium title text">Hotel: </span> 
+                        </div>
+                        <div class="slds-col slds-m-top_xx-small">
+                            <span class="slds-text-heading_medium title text">Address: </span> 
+                        </div>
+                        <div class="slds-col slds-m-top_xx-small">
+                            <span class="slds-text-heading_medium title text">Room: </span> 
+                        </div>
+                        <div class="slds-col slds-m-top_xx-small">
+                            <span class="slds-text-heading_medium title text">Check-in date: </span> 
+                        </div>
+                        <div class="slds-col slds-m-top_xx-small">
+                            <span class="slds-text-heading_medium title text">Check-out date: </span> 
+                        </div>
+                        <div class="slds-col slds-m-top_xx-small">
+                            <span class="slds-text-heading_medium title text">Total cost: </span> 
+                        </div>
+                    </div>
+                    
+                    <div class="slds-col slds-grid slds-grid_vertical slds-grid_align-space">
+                        <div class="slds-col slds-m-top_xx-small">
+                            <span class="slds-text-heading_small title text">{!v.hotelModal}</span> 
+                        </div>
+                        <div class="slds-col slds-m-top_xx-small">
+                            <span class="slds-text-heading_small title text">{!v.addressModal}</span> 
+                        </div>
+                        <div class="slds-col slds-m-top_xx-small">
+                            <span class="slds-text-heading_small title text">{!v.roomModal}</span> 
+                        </div>
+                        <div class="slds-col slds-m-top_xx-small">
+                            <span class="slds-text-heading_small title text"><lightning:formattedDateTime value="{!v.checkInDate}"/></span> 
+                        </div>
+                        <div class="slds-col slds-m-top_xx-small">
+                            <span class="slds-text-heading_small title text"><lightning:formattedDateTime value="{!v.checkOutDate}"/></span> 
+                        </div>
+                        <div class="slds-col slds-m-top_xx-small">
+                            <span class="slds-text-heading_small title text"><lightning:formattedNumber value="{!v.totalCostModal}" style="currency" currencyCode="USD" currencyDisplayAs="code"/></span> 
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- loading spinner -->
+                <div aura:id="spinnerModal" class="page-item page-item_collapsed spinner-modal spinner-container slds-col slds-size_1-of-1 slds-grid_align-center slds-grid slds-is-absolute">
+                    <div role="status" class="slds-spinner slds-spinner_large">
+                        <span class="slds-assistive-text">Loading</span>
+                        <div class="slds-spinner__dot-a"></div>
+                        <div class="slds-spinner__dot-b"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- modal box footer -->
+            <footer class="slds-modal__footer">
+                <div class="slds-grid">
+                    <div class="slds-col slds-grid slds-gutters_direct slds-wrap">
+                        <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2 slds-m-bottom_small ">
+                            <lightning:input aura:id="email-modal" variant="label-hidden" type="email"  required="true" placeholder="your email" value="{!v.emailModal}"/>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2">
+                            <lightning:input aura:id="name-modal" variant="label-hidden" type="text" required="true" placeholder="your name" value="{!v.nameModal}"/>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2 ">
+                            <lightning:button onclick="{!c.closeModal}" 
+                                              label="cancel" 
+                                              variant="base" 
+                                              class="slds-col slds-button_base slds-grow-none slds-col_bump-left"/>
+                        </div>
+                        <div class="slds-col slds-grid slds-size_1-of-1 slds-large-size_1-of-2">
+                            <lightning:button aura:id="modalReservationButton"
+                                              onclick="{!c.registerReservation}" 
+                                              variant="success" 
+                                              label="Confirm"
+                                              class="slds-col slds-col_bump-right slds-grow-none"/>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </section>
+    
+    <!-- Modal Box Success--> 
+    <section aura:id="successModal" role="dialog" tabindex="-2" aria-modal="true" class="slds-modal">
+        <div class="slds-modal__container">
+            <!-- modal box body -->
+            <div class="page-item slds-modal__content slds-p-around_medium slds-is-relative">
+                <!-- success message -->
+                <div class="page-item slds-col slds-size_1-of-1 slds-grid_align-center slds-grid">
+                    <div class="slds-col">
+                        <span class="slds-text-heading_large title text">Reservation created successfully </span>
+                    </div> 
+                    <div class="slds-col slds-m-left_small">
+                        <lightning:icon iconName="utility:success" alternativeText="" />
+                    </div> 
+                </div>
+            </div>
+            
+            <!-- modal box footer -->
+            <footer class="slds-modal__footer">
+                <div class="slds-grid slds-grid_align-center">
+                    <div class="slds-col slds-grow-none slds-m-left_small">
+                        <lightning:button onclick="{!c.closeSuccessModal}" 
+                                          variant="success" 
+                                          label="Ok"/>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </section>
+    
+    <!-- Modal Box Error--> 
+    <section aura:id="errorModal" role="dialog" tabindex="-1" aria-modal="true" class="slds-modal">
+        <div class="slds-modal__container">
+            <!-- modal box body -->
+            <div class="page-item slds-modal__content slds-p-around_medium slds-is-relative">
+                <!-- success message -->
+                <div class="page-item slds-col slds-size_1-of-1 slds-grid_align-center slds-grid">
+                    <div class="slds-col">
+                        <span class="slds-text-heading_large title text">Attempt to make a reservation failed, try again later </span>
+                    </div> 
+                    <div class="slds-col slds-m-left_small">
+                        <lightning:icon iconName="utility:error" alternativeText="" />
+                    </div> 
+                </div>
+            </div>
+            
+            <!-- modal box footer -->
+            <footer class="slds-modal__footer">
+                <div class="slds-grid slds-grid_align-center">
+                    <div class="slds-col slds-grow-none slds-m-left_small">
+                        <lightning:button onclick="{!c.closeErrorModal}" 
+                                          variant="success" 
+                                          label="Ok"/>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </section>
+    
+    <!-- modal box backdrop -->
+    <div aura:id="backdrop" class="slds-backdrop">
+    </div>
+    
+</aura:component>

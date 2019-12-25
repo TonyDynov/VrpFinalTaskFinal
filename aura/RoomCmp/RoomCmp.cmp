@@ -1,0 +1,125 @@
+<aura:component >
+    
+    <!--room attribute-->
+	<aura:attribute name="room" type="sObject" />
+    <aura:attribute name="hotel" type="sObject" />
+
+    <!-- register event on button click -->
+    <aura:registerEvent name="ReservationButtonClickEvt" type="c:ReservationButtonClickEvt" />
+
+    
+    
+    <!--hotel room main section -->
+    <div  class="room slds-is-relative slds-col slds-grid slds-grid_vertical  border-debug slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3 slds-m-vertical_large">
+        
+        <!-- hotel room photo with alternative placeholder-->  
+        <aura:if isTrue="{!v.room.Image__c != null}">
+            <div class="slds-col slds-m-bottom_large ">
+                <img class="hotel-room-image-file" src="{!v.room.Image__c}" alt="room image"/>
+            </div>
+            <aura:set attribute="else">
+                <div class="slds-col slds-m-bottom_large">
+                    <img class="hotel-room-image-file" src="https://sun9-57.userapi.com/c855720/v855720250/199e5d/Xc4SXn9-zVQ.jpg" alt="room image"/> 
+                    <!--img class="hotel-room-image-file" src="https://sun9-11.userapi.com/c857428/v857428105/11ea69/JdnmbFK6ROQ.jpg" alt="room image"/> -->
+                </div>
+            </aura:set>
+        </aura:if>
+        
+        <!-- badge for "only 1 left" message -->
+        <aura:if isTrue="{!v.room.Quantity__c==1}">
+            <div class="slds-is-absolute photo_badge">
+                <lightning:badge class="text" label="Only one left!"/>
+            </div>
+        </aura:if>
+        
+        <!-- room name -->
+        <div class="slds-col slds-m-bottom_small slds-m-left_small">
+            <span class="slds-text-heading_medium title text">{!v.room.Name} for {!v.room.Guests__c} </span> 
+            <aura:if isTrue="{!v.room.Guests__c == 1}">
+                <span class="slds-text-heading_medium title text"> guest</span>
+                <aura:set attribute="else">
+                    <span class="slds-text-heading_medium title text"> guests</span>
+                </aura:set>
+            </aura:if>
+        </div>
+        
+        <!-- additional services badges -->
+        <div class="slds-col slds-col_bump-top slds-m-bottom_small slds-grid slds-wrap slds-gutters_direct-x-small slds-m-left_xxx-small">
+            
+            <!-- Wi-Fi badge -->
+            <aura:if isTrue="{!v.room.WiFi__c}">
+                <div class="slds-col slds-grow-none slds-m-vertical_x-small">
+                    <lightning:badge class="text" label="Wi-Fi"/>
+                </div>         
+                <aura:set attribute="else">
+                    <div class="slds-order_5 slds-col slds-hidden slds-grow-none slds-m-vertical_x-small">
+                        <lightning:badge label="Wi-Fi"/>
+                    </div>  
+                </aura:set>
+            </aura:if>
+            
+            <!-- Minibar badge -->
+            <aura:if isTrue="{!v.room.MiniBar__c}">
+                <div class="slds-col slds-grow-none slds-m-vertical_x-small">
+                    <lightning:badge class="text" label="Minibar"/>
+                </div>
+                <aura:set attribute="else">
+                    <div class="slds-order_5 slds-col slds-hidden slds-grow-none slds-m-vertical_x-small">
+                        <lightning:badge label="Minibar"/>
+                    </div>  
+                </aura:set>
+            </aura:if>
+            
+            <!-- No smoking badge -->
+            <aura:if isTrue="{!v.room.NoSmoking__c}">
+                <div class="slds-col slds-grow-none slds-m-vertical_x-small">
+                    <lightning:badge class="text" label="No smoking"/>
+                </div>
+                <aura:set attribute="else">
+                    <div class="slds-order_5 slds-col slds-hidden slds-grow-none slds-m-vertical_x-small">
+                        <lightning:badge label="No smoking"/>
+                    </div>  
+                </aura:set>
+            </aura:if>
+            
+            <!-- Air conditioner badge -->
+            <aura:if isTrue="{!v.room.AirConditioner__c}">
+                <div class="slds-col slds-grow-none slds-m-vertical_x-small">
+                    <lightning:badge class="text" label="Air conditioner"/>
+                </div>
+                <aura:set attribute="else">
+                    <div class="slds-order_5 slds-col slds-hidden slds-grow-none slds-m-vertical_x-small">
+                        <lightning:badge label="Air conditioner"/>
+                    </div>  
+                </aura:set>
+            </aura:if>
+            
+            <!-- Room service badge -->
+            <aura:if isTrue="{!v.room.RoomService__c}">
+                <div class="slds-col slds-grow-none slds-m-vertical_x-small">         
+                    <lightning:badge class="text" label="Room service"/>
+                </div>
+                <aura:set attribute="else">
+                    <div class="slds-order_5 slds-col slds-hidden slds-grow-none slds-m-vertical_x-small">
+                        <lightning:badge label="Room service"/>
+                    </div>  
+                </aura:set>
+            </aura:if>
+        </div>
+        
+        <div class="room__bottom-row slds-col slds-grid slds-wrap slds-m-left_small slds-m-top_xx-small">
+            
+            <!-- reservation button -->
+            <div class="slds-grow-none slds-col slds-m-right_small">
+                <lightning:button onclick="{!c.handleReservationButtonClick}" value="{!v.room.Name + '$$$' + v.room.Guests__c + '$$$' +  v.room.NightlyRate__c + '$$$' + v.hotel.Name + '$$$' + v.hotel.Address__c + '$$$' + v.room.Quantity__c + '$$$' + v.room.Id}" variant="success" label="make a reservation"/>
+            </div>
+            
+            <!-- hotel room rate -->
+            <div class="slds-col slds-col_bump-right  slds-m-top_xx-small">
+                <lightning:formattedNumber class="slds-text-heading_small button-text text" value="{!v.room.NightlyRate__c}" style="currency" currencyCode="USD" currencyDisplayAs="code"/>
+                <span class="slds-text-title">/night</span>
+            </div>
+        </div>
+        
+    </div>
+</aura:component>

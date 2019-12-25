@@ -1,0 +1,17 @@
+<apex:page sidebar="false" showHeader="false">
+    <apex:includeLightning />
+
+    <div id="lightning" />
+
+    <script>
+        $Lightning.use("c:BookingApp", function() {
+          $Lightning.createComponent("c:RoomBookingMainCmp",
+              {},
+              "lightning",
+              function(cmp) {
+                console.log("app initialized");
+              }
+          );
+        });
+    </script>
+</apex:page>
