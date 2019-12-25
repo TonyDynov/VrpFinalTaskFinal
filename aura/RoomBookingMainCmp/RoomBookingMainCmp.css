@@ -1,0 +1,314 @@
+/*
+    rgb(75, 202, 129) - brand green color
+	rgb(2,126,70); - dark brand green color
+	rgb(171, 173, 176) - neutral grey color
+	rgb(45,45,45) - dark grey color
+*/
+
+/* background flickering fix for android */
+.THIS *{
+  -webkit-backface-visibility:hidden;
+     -moz-backface-visibility:hidden;
+      -ms-backface-visibility:hidden;
+       -o-backface-visibility:hidden;
+          backface-visibility:hidden;
+}
+
+/* border for layout debug */
+.THIS .border-debug {
+    /*
+    border: 1px solid grey;
+    border-radius: 3px;
+    */
+}
+
+
+
+/* HEADER */
+
+/* header */
+.THIS .header {
+    height:100vh;   
+    max-height:100vh;
+    position: relative;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    transition: 500ms ;
+}
+
+/* header mobile */
+@media only screen and (max-width: 1023px)  {
+    .THIS .header {
+        height:91vh;   
+        overflow-y: show;
+    }
+}
+
+
+/* header after first search */
+.THIS .header-collapsed {
+    /*
+    border-bottom-left-radius: 50% 25%;
+    border-bottom-right-radius: 50% 25%;
+    */
+}
+
+@media only screen  and (min-width: 480px) and (max-width: 767px)  {
+ .THIS .header-collapsed {
+    max-height:77vh;
+    }
+}
+
+@media only screen and (max-width: 479px)  {
+ .THIS .header-collapsed {
+        max-height:660px;
+    }
+}
+
+@media only screen and (min-width: 480px) and (max-width: 767px)  {
+    .THIS .header-collapsed {
+        max-height:450px;
+    }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 1023px)  {
+    .THIS .header-collapsed {
+        max-height:330px;
+    }
+}
+
+@media only screen and (min-width: 1024px)  {
+    .THIS .header-collapsed {
+        max-height:250px;
+    }
+}
+
+/* header background image */
+.THIS .header-bg {
+    position: absolute;
+    filter: saturate(75%) brightness(0.75) ;    
+    width:100%;
+    height:100%;
+    /*background-image: url(https://img2.fonwall.ru/o/kp/toledo-ispaniya-gorod.jpg);*/
+    background-image: url(https://sun9-70.userapi.com/c855228/v855228053/1944a5/fTSTMPAo1D4.jpg);
+    background-color: rgb(45,45,45);
+    background-size: cover;
+    background-position: center;
+    transition:1000ms;
+}
+
+.THIS .header-collapsed>.header-bg {
+    background-image: url(https://sun9-39.userapi.com/c855228/v855228053/194441/SBaVSLhBWWw.jpg); 
+    filter: saturate(50%) brightness(0.5) ;    
+}
+
+/* input labels*/
+.THIS .slds-form-element__label {
+    color: white;
+}
+
+/* input label shadows for contrast*/
+.THIS .slds-form-element__label {
+    text-shadow: 0px 0px 5px black, 0px 0px 10px black, 0px 0px 10px black; 
+}
+
+
+
+/* DATEPICKER */
+
+/* datepicker calendar today date */
+.THIS .slds-is-today .slds-day {
+    border-color: rgb(75, 202, 129) !important;
+    border:1px solid rgb(75, 202, 129);
+    background-color: white !important;
+}
+
+/* datepicker calendar selected date */
+.THIS .slds-is-selected .slds-day {
+    background-color: rgb(75, 202, 129) !important;
+    color: white !important;
+}
+
+/* datepicker 'Today' button */
+.THIS .slds-text-link {
+    color: rgb(75, 202, 129) !important;
+}
+
+/* badge styling */
+.THIS .slds-badge:hover {
+    background-color: rgb(75, 202, 129) !important;
+    transition: 250ms;
+    color: white;
+}
+
+
+
+/* INPUTS */
+
+/* inputs styling */
+.THIS .slds-input {
+    border-color: rgb(171, 173, 176);
+}
+
+/* 'select' styling */
+.THIS .slds-select {
+    border-color: rgb(171, 173, 176);
+}
+
+/* togglers */
+.THIS .slds-checkbox_toggle [type=checkbox]:checked+.slds-checkbox_faux_container .slds-checkbox_faux {
+    background-color: rgb(75, 202, 129) !important;
+    border-color: rgb(75, 202, 129) !important;
+}
+
+
+
+/* BUTTONS */
+
+/* standard button */
+.THIS .slds-button {
+    border-radius: 300px; ;
+}
+
+/* 'success' button */
+.THIS .slds-button_success {
+    transition:500ms;
+    color: white;
+    font-weight:bold;
+    word-wrap: normal;
+}
+
+/* 'success' button disabled state */
+.THIS .slds-button_success[disabled] {
+    background-color: rgb(171, 173, 176) !important;
+    border-color: rgb(171, 173, 176) !important;
+    color:white !important;
+}
+
+/* disabled buttons */
+.THIS .slds-button[disabled] {
+    color: rgb(171, 173, 176);
+}
+
+/* bare buttons */
+.THIS .slds-button_base {
+    color: rgb(45,45,45);
+    font-weight:bold;
+}
+
+/* bare buttons hover*/
+.THIS .slds-button_base:hover {
+    color: rgb(2,126,70);
+}
+
+
+
+/* success icons */
+.THIS .slds-icon-text-success {
+    fill:rgb(75, 202, 129);
+}
+
+/* hotel room demo image */
+.THIS .hotel-room-image-file {
+    border-radius: 0.4rem;
+}
+
+/* text general */
+.THIS .text {
+    color: rgb(45,45,45);
+}
+
+/* text title */
+.THIS .title {
+    font-weight: bold;
+}
+
+/* text buttons */
+.THIS .button-text {
+    font-weight: bold;
+}
+
+
+
+/* loading spinner */
+
+.THIS .slds-spinner__dot-a:before, .THIS .slds-spinner__dot-a:after, .THIS .slds-spinner:before, .THIS .slds-spinner_large.slds-spinner:after, .THIS .slds-spinner__dot-b:before, .THIS .slds-spinner__dot-b:after {
+    background: rgb(75, 202, 129);
+    z-index: -1000;
+        transform: translate(50%, 50%);
+}
+
+.THIS .spinner-container {
+    height:50vh;
+    max-height:50vh;
+    transition: 250ms;
+}
+@media only screen and (max-width: 1023px)  {
+    .THIS .spinner-container {
+        height:47vh; 
+        max-height:47vh;
+    }
+}
+
+
+.THIS .spinner-container_collapsed {
+    opacity: 0%;
+    transform: scale(1, 0);
+    max-height:0px;
+}
+
+
+
+/* main section + pagination */
+
+.THIS .page-item {
+    transition: 250ms;
+	overflow:hidden;
+    opacity: 100%;
+}
+
+.THIS .page-item_collapsed {
+    opacity: 0%;
+}
+
+.THIS .error-message {
+    transition: 250ms;
+	overflow:hidden;
+    opacity: 100%;
+    height:50vh;
+    max-height:50vh;
+}
+
+.THIS .error-message_collapsed {
+    opacity: 0%;
+    max-height:0px;
+}
+
+.THIS .photo_badge {
+    top: 1rem;
+    left: 2rem;
+}
+
+.THIS .slds-text-heading_small {
+    color: dark-grey;
+}
+
+.THIS .spinner-modal {
+    top:50%;
+    left:50%;
+    transform: translate(-50%, -50%);
+}
+
+@media only screen and (max-width: 1023px)  {
+    .THIS .slds-badge, .THIS .slds-button, .THIS .slds-text-heading_small, .THIS .slds-text-title, .THIS .slds-button_success, .THIS .slds-form-element__label {
+		font-size: 24px !important;
+        padding: 20px,15px;
+    }
+
+    .THIS .slds-text-heading_medium, .THIS .slds-text-color_weak{
+        font-size: 36px !important;
+    }
+    .THIS .slds-text-heading_large {
+        font-size: 48px !important;
+    }
+}

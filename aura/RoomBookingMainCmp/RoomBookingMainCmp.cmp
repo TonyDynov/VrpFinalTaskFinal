@@ -1,0 +1,203 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global" controller="RoomBookingMainCmpController">
+    
+    <!-- hotels -->
+    <aura:attribute name="hotels" type="sObject[]" default=""/>
+    
+    <!-- search inputs -->
+    <aura:attribute name="city" type="string" default="Minsk"/>
+    <aura:attribute name="guests" type="integer" default="1"/>
+    <aura:attribute name="checkInDate" type="date" />
+    <aura:attribute name="checkOutDate" type="date" default="2020-02-15"/>
+    <aura:attribute name="checkOutDateMin" type="date" />
+    <aura:attribute name="today" type="date" default=""/>
+    <aura:attribute name="minPrice" type="integer" default=""/>
+    <aura:attribute name="maxPrice" type="integer" default=""/>
+    
+    <!-- search amenities togglers -->
+    <aura:attribute name="wiFi" type="boolean" default="false"/>
+    <aura:attribute name="roomService" type="boolean" default="false"/>
+    <aura:attribute name="miniBar" type="boolean" default="false"/>
+    <aura:attribute name="noSmoking" type="boolean" default="false"/>
+    <aura:attribute name="airConditioner" type="boolean" default="false"/>
+    
+    <!-- attributes for pagination -->
+    <aura:attribute name="hotelsNumber" type="integer" default=""/>
+    <aura:attribute name="roomsNumber" type="integer" default=""/>
+    
+    <aura:handler name="init" action="{!c.init}" value="{!this}" />   
+    <aura:handler name="change" action="{!c.handleCheckInChange}" value="{!v.checkInDate}" />    
+    
+    
+    
+    <div class="slds-grid slds-wrap slds-grid--align-center slds-scrollable_none">
+        
+        <!-- header -->
+        <div aura:id="header" class="slds-col slds-size_1-of-1 slds-grid_align-space slds-grid header border-debug">
+            
+            <!--background -->
+            <div class="header-bg"></div>
+            
+            <div class="slds-col slds-container_x-large slds-size_1-of-1 slds-grid slds-wrap slds-gutters_direct-large slds-m-vertical_large">
+                <!-- search unputs -->
+                <div class="slds-col slds-grid slds-col_bump-top slds-wrap slds-gutters_direct-large ">
+                    <!-- city input -->
+                    <div class="slds-col slds-m-bottom_small slds-size_1-of-1 slds-small-size_1-of-2 slds-medium-size_1-of-3 slds-large-size_1-of-6 slds-medium-order_1 slds-large-order_1">
+                        <lightning:input aura:id="validity-check" value="{!v.city}" label="City:" required="true" class="input" />
+                    </div>
+                    <!-- guests number input -->
+                    <div class="slds-col slds-m-bottom_small slds-size_1-of-1 slds-small-size_1-of-2 slds-medium-size_1-of-3 slds-large-size_1-of-6 slds-medium-order_4 slds-large-order_2">
+                        <lightning:select aura:id="validity-check" value="{!v.guests}" name="select1" label="Guests:" required="true">
+                            <option value=""></option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                        </lightning:select>
+                    </div>
+                    <!-- check-in date input -->
+                    <div class="slds-col slds-m-bottom_small slds-size_1-of-1 slds-small-size_1-of-2 slds-medium-size_1-of-3 slds-large-size_1-of-6 slds-medium-order_2 slds-large-order_3">
+                        <lightning:input aura:id="validity-check" value="{!v.checkInDate}" min="{!v.today}" type="date" label="Check-in date" required="true"/>
+                    </div>
+                    <!-- check-out date input -->
+                    <div class="slds-col slds-m-bottom_small slds-size_1-of-1 slds-small-size_1-of-2 slds-medium-size_1-of-3 slds-large-size_1-of-6 slds-medium-order_5 slds-large-order_4">
+                        <lightning:input aura:id="validity-check" value="{!v.checkOutDate}" min="{!v.checkOutDateMin}" type="date" label="Check-out date" required="true"/>
+                    </div>
+                    <!-- minimum price input -->
+                    <div class="slds-col slds-m-bottom_small slds-size_1-of-1 slds-small-size_1-of-2 slds-medium-size_1-of-3 slds-large-size_1-of-6 slds-medium-order_3 slds-large-order_5">
+                        <lightning:input type="number" min="0" max="{!v.maxPrice}"  aura:id="validity-check" value="{!v.minPrice}" label="Minimum price:" />
+                    </div>
+                    <!-- maximum price input -->
+                    <div class="slds-col slds-m-bottom_small slds-size_1-of-1 slds-small-size_1-of-2 slds-medium-size_1-of-3 slds-large-size_1-of-6 slds-medium-order_6 slds-large-order_6">
+                        <lightning:input type="number" min="{!v.minPrice}"  aura:id="validity-check" value="{!v.maxPrice}" label="Maximum price:" />
+                    </div>
+                </div>
+                
+                <!-- search togglers -->
+                <div class="slds-col slds-grid slds-wrap slds-gutters_direct-large slds-grid_align-center slds-order_7">
+                    <div class="slds-col slds-grow-none slds-m-vertical_small">
+                        <lightning:input checked="{!v.wiFi}" messageToggleActive="" messageToggleInactive="" variant="label-stacked" type="toggle" label="Wi-Fi"/>
+                    </div>
+                    <div class="slds-col slds-grow-none slds-m-vertical_small">
+                        <lightning:input checked="{!v.miniBar}" messageToggleActive="" messageToggleInactive="" type="toggle" label="Minibar"/>
+                    </div>
+                    <div class="slds-col slds-grow-none slds-m-vertical_small">
+                        <lightning:input checked="{!v.noSmoking}" messageToggleActive="" messageToggleInactive="" type="toggle" label="No smoking"/>
+                    </div>
+                    <div class="slds-col slds-grow-none slds-m-vertical_small">
+                        <lightning:input checked="{!v.airConditioner}" messageToggleActive="" messageToggleInactive="" type="toggle" label="Air conditioner"/>
+                    </div>
+                    <div class="slds-col slds-grow-none slds-m-vertical_small">
+                        <lightning:input checked="{!v.roomService}" messageToggleActive="" messageToggleInactive="" type="toggle" label="Room service"/>
+                    </div>
+                </div>
+                
+                <!-- search button -->
+                <div class="slds-col slds-grid slds-grid_align-center slds-m-vertical_x-small slds-size_1-of-1 slds-order_12">
+                    <div class="slds-col">
+                        <lightning:button disabled="false" aura:id="searchButton" onclick="{!c.handleSearch}" label="Search" iconName="utility:search" iconPosition="right" variant="success" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- no results error message -->
+        <div aura:id="error-message" class="error-message error-message_collapsed slds-col slds-size_1-of-1 slds-align_absolute-center slds-grid slds-grid_vertical slds-is-relative">
+            <div class="slds-col">
+                <span class="slds-text-heading_large title text">No rooms matching description were found</span>
+            </div> 
+            <div class="slds-col">
+                <lightning:icon iconName="utility:error" alternativeText="" />
+            </div> 
+        </div>
+        
+        <!-- loading spinner -->
+        <div aura:id="spinner" class="page-item spinner-container_collapsed spinner-container slds-col slds-size_1-of-1 slds-grid_align-center slds-grid slds-is-relative">
+            <div class="demo-only demo-only demo-only_viewport">
+                <div role="status" class="slds-spinner slds-spinner_large">
+                    <span class="slds-assistive-text">Loading</span>
+                    <div class="slds-spinner__dot-a"></div>
+                    <div class="slds-spinner__dot-b"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- pagination -->
+        <div aura:id="pagination-top" class="slds-hide page-item page-item_collapsed slds-col slds-m-top_xx-large slds-m-bottom_xx-large slds-grid slds-grid_vertical slds-grid_align-center">
+            <c:PaginationCmp hotelsNumber="{!v.hotelsNumber}" roomsNumber="{!v.roomsNumber}"/>
+        </div>
+        
+        <!-- main -->
+        <div aura:id="main" class="slds-hide page-item page-item_collapsed slds-col slds-size_1-of-1 slds-grid_align-center slds-grid">
+            <div class="slds-col slds-container--x-large slds-grid slds-wrap">
+                
+                <aura:iteration items="{!v.hotels}" var="hotel">
+                    
+                    <!-- hotel -->
+                    <div class=" slds-col slds-p-around_small  slds-size_1-of-1 slds-grid slds-grid_vertical">
+                        
+                        <!--hotel card header-->
+                        <div class="slds-col">
+                            <div class="slds-grid slds-wrap slds-m-top_medium slds-m-left_small">
+                                
+                                <div class="slds-col slds-grid slds-grid_vertical slds-size_9-of-12">
+                                    
+                                    <!-- hotel name -->
+                                    <div class="slds-col">
+                                        <span class="slds-text-heading_large title text">{!hotel.Name}</span>
+                                    </div>
+                                    
+                                    <!-- hotel address -->
+                                    <div class="slds-col">
+                                        <p class="slds-m-vertical_xx-small slds-text-color_weak">{!hotel.Address__c}</p>
+                                    </div>
+                                    
+                                    <!-- hotel star rating -->
+                                    <div class="slds-col">
+                                        <p>
+                                            <aura:if isTrue="{!hotel.StarRating__c>0}">
+                                                <lightning:icon  iconName="utility:favorite" alternativeText="Connected" size="small" variant="success"/>
+                                            </aura:if>
+                                            <aura:if isTrue="{!hotel.StarRating__c>1}">
+                                                <lightning:icon  iconName="utility:favorite" alternativeText="Connected" size="small" variant="success"/>
+                                            </aura:if>
+                                            <aura:if isTrue="{!hotel.StarRating__c>2}">
+                                                <lightning:icon  iconName="utility:favorite" alternativeText="Connected" size="small" variant="success"/>
+                                            </aura:if>
+                                            <aura:if isTrue="{!hotel.StarRating__c>3}">
+                                                <lightning:icon  iconName="utility:favorite" alternativeText="Connected" size="small" variant="success"/>
+                                            </aura:if>
+                                            <aura:if isTrue="{!hotel.StarRating__c>4}">
+                                                <lightning:icon  iconName="utility:favorite" alternativeText="Connected" size="small" variant="success"/>
+                                            </aura:if>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div> 
+                        </div>
+                        
+                        <!--hotel rooms-->
+                        <div class="room-rows slds-col slds-m-vertical_medium slds-grid slds-gutters_direct-medium slds-wrap">
+                            
+                            <aura:iteration items="{!hotel.Rooms__r}" var="room">
+                                
+                                <!--hotel room component-->
+                                <c:RoomCmp room="{!room}" hotel="{!hotel}"/>   
+   
+                            </aura:iteration>
+                            
+                        </div>
+                    </div>
+                </aura:iteration>
+                
+            </div>
+        </div>
+        
+        <!-- pagination -->
+        <div aura:id="pagination-bottom" class="slds-hide page-item page-item_collapsed slds-col slds-m-top_xx-large slds-m-bottom_xx-large slds-grid slds-grid_vertical slds-grid_align-center">
+            <c:PaginationCmp hotelsNumber="{!v.hotelsNumber}" roomsNumber="{!v.roomsNumber}"/>
+        </div>
+    </div>
+    
+    <c:ReservationModalCmp checkInDate="{!v.checkInDate}" checkOutDate="{!v.checkOutDate}"/>
+    
+</aura:component>
